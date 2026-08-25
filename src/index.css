@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+}
+
+@layer components {
+  /* Cards */
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-card transition-all duration-200;
+  }
+  .card-interactive {
+    @apply card hover:shadow-card-hover hover:border-slate-300;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 select-none;
+  }
+  .btn-primary {
+    @apply btn bg-primary-600 text-white shadow-sm hover:bg-primary-700 hover:shadow active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500/30;
+  }
+  .btn-secondary {
+    @apply btn border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300/30;
+  }
+  .btn-danger {
+    @apply btn bg-error-600 text-white shadow-sm hover:bg-error-700 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-error-500/30;
+  }
+  .btn-ghost {
+    @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98];
+  }
+
+  /* Form Inputs */
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all duration-150 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 disabled:bg-slate-50 disabled:text-slate-400;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-600;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide border;
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border-b border-slate-200/80;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Markdown AI Report Styling */
+.report-content h1 {
+  @apply mb-4 text-2xl font-extrabold text-slate-900 tracking-tight;
+}
+.report-content h2 {
+  @apply mb-3 mt-6 text-lg font-bold text-slate-900 pb-1.5 border-b border-slate-200;
+}
+.report-content h3 {
+  @apply mb-2 mt-4 text-base font-semibold text-slate-800;
+}
+.report-content p {
+  @apply mb-2 text-sm leading-relaxed text-slate-700;
+}
+.report-content ul {
+  @apply mb-3 ml-4 list-disc space-y-1 text-sm text-slate-700;
+}
+.report-content ol {
+  @apply mb-3 ml-4 list-decimal space-y-1 text-sm text-slate-700;
+}
+.report-content table {
+  @apply mb-4 w-full border-collapse text-sm overflow-hidden rounded-xl border border-slate-200;
+}
+.report-content th {
+  @apply border border-slate-200 bg-slate-100/80 px-3.5 py-2.5 text-left font-bold text-slate-700 text-xs uppercase tracking-wider;
+}
+.report-content td {
+  @apply border border-slate-200 px-3.5 py-2.5 text-slate-600 text-xs;
+}
+.report-content strong {
+  @apply font-semibold text-slate-900;
+}
+.report-content hr {
+  @apply my-5 border-slate-200;
+}
+.report-content em {
+  @apply text-xs text-slate-400 italic;
+}
