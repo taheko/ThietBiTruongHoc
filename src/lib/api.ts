@@ -20,3 +20,30 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
 export function checkApiHealth() {
   return apiFetch<{ status: string; database: string; sample_rows: number }>('/api/health');
 }
+
+export interface AiReportResponse {
+  success: boolean;
+  type: string;
+  title: string;
+  content: string;
+  engine: string;
+}
+
+export function generateRemoteAiReport(payload: {
+  type: string;
+  session_id?: string;
+  data: Record<string, unknown>;
+}): Promise<AiReportResponse> {
+  return apiFetch<AiReportResponse>('/api/ai/report', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function askRemoteAiAgent(message: string, data?: string) {
+  return apiFetch<{ success: boolean; skill?: string; response: string }>('/api/ai/ask', {
+    method: 'POST',
+    body: JSON.stringify({ message, data }),
+  });
+}
+

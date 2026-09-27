@@ -13,12 +13,14 @@ import {
 } from 'lucide-react';
 import { useData } from '@/hooks/useData';
 import { supabase } from '@/lib/supabase';
+import { generateRemoteAiReport } from '@/lib/api';
 import {
   generateReport,
   REPORT_TYPE_LABELS,
   type AIReportInput,
 } from '@/lib/ai-engine';
 import type { AIReportType, AIReport } from '@/types/database';
+
 
 const REPORT_CARDS: {
   type: AIReportType;
@@ -145,7 +147,7 @@ export function AIReportsPage() {
   const [selectedType, setSelectedType] = useState<AIReportType>('inventory_report');
   const [selectedSessionId, setSelectedSessionId] = useState<string>('');
   const [generating, setGenerating] = useState(false);
-  const [currentReport, setCurrentReport] = useState<{ id?: string; title: string; content: string } | null>(null);
+  const [currentReport, setCurrentReport] = useState<{ id?: string; title: string; content: string; engine?: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Danh sách báo cáo đã lưu sắp xếp mới nhất trước
@@ -155,7 +157,7 @@ export function AIReportsPage() {
     );
   }, [aiReports]);
 
-  // Sinh báo cáo AI theo UC014
+  // Sinh báo cáo AI theo UC014 (Hỗ trợ Dual-Engine: Remote FastAPI AI + Local Fallback)
   const handleGenerateReport = async () => {
     setError(null);
 
@@ -179,9 +181,10 @@ export function AIReportsPage() {
         sessionId: selectedSessionId || undefined,
       };
 
-      const content = generateReport(selectedType, input);
-
+      let content = '';
       let title = REPORT_TYPE_LABELS[selectedType];
+      let engine = 'Động cơ Phân tích Nội bộ (Deterministic Engine)';
+
       if (selectedType === 'inventory_report') {
         const s = sessions.find((item) => item.id === selectedSessionId);
         title = `Báo cáo kiểm kê: ${s?.title || s?.name || 'Đợt kiểm kê'}`;
@@ -189,6 +192,35 @@ export function AIReportsPage() {
         title = 'Tóm tắt tình trạng tài sản theo phòng ban';
       } else if (selectedType === 'replacement_suggestions') {
         title = 'Gợi ý danh sách tài sản cần sửa chữa hoặc thay thế';
+      }
+
+      // 1. Thử nghiệm kết nối tới Backend AI Agent (FastAPI + Google Gemini)
+      try {
+        const remoteRes = await generateRemoteAiReport({
+          type: selectedType,
+          session_id: selectedSessionId || undefined,
+          data: {
+            assets: assets.slice(0, 50),
+            categories,
+            locations,
+            session: sessions.find((s) => s.id === selectedSessionId),
+            inventory_items: inventoryItems.filter((it) => it.session_id === selectedSessionId),
+            repairs: repairs.slice(0, 30),
+          },
+        });
+
+        if (remoteRes && remoteRes.content) {
+          content = remoteRes.content;
+          if (remoteRes.title) title = remoteRes.title;
+          engine = 'Google Gemini AI Agent (Backend Microservice)';
+        }
+      } catch (remoteErr) {
+        console.info('Backend AI chưa bật hoặc lỗi kết nối, chuyển sang chế độ Dự phòng (Local Fallback):', remoteErr);
+      }
+
+      // 2. Dự phòng: Sinh báo cáo qua Rule-based Heuristic AI Engine
+      if (!content) {
+        content = generateReport(selectedType, input);
       }
 
       // Tự động lưu vào bảng ai_reports theo UC014
@@ -202,6 +234,7 @@ export function AIReportsPage() {
             session_id: selectedSessionId || null,
             asset_count: assets.length,
             generated_at: new Date().toISOString(),
+            engine,
           },
         })
         .select()
@@ -215,6 +248,7 @@ export function AIReportsPage() {
         id: savedData?.id,
         title,
         content,
+        engine,
       });
 
       await reload();
@@ -224,6 +258,7 @@ export function AIReportsPage() {
       setGenerating(false);
     }
   };
+
 
   // Xem lại báo cáo đã lưu (UC015, TC_45)
   const handleSelectSavedReport = (report: AIReport) => {
@@ -376,6 +411,13 @@ export function AIReportsPage() {
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 Đã lưu
               </span>
+              {currentReport.engine && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700 border border-primary-200">
+                  <Sparkles className="h-3 w-3" />
+                  {currentReport.engine}
+                </span>
+              )}
+
             </div>
 
             <button

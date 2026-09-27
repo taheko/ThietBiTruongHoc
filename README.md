@@ -64,6 +64,18 @@ Hệ thống hỗ trợ 2 tác nhân theo đặc tả yêu cầu:
 
 ---
 
+## 📑 Hệ thống tài liệu kỹ thuật & Đánh giá 5 Tiêu chí
+
+Hệ thống tài liệu hoàn chỉnh được lưu trữ tại thư mục `docs/`:
+- **Báo cáo Đánh giá Toàn diện 5 Tiêu chí:** [`docs/Bao_cao_Danh_gia_Toan_dien_5_Tieu_chi.md`](./docs/Bao_cao_Danh_gia_Toan_dien_5_Tieu_chi.md)
+- **Thực nghiệm & So sánh các phiên bản Prompt (Tiêu chí 3.2):** [`docs/Tieu_chi_3_Thuc_nghiem_va_So_sanh_Prompt.md`](./docs/Tieu_chi_3_Thuc_nghiem_va_So_sanh_Prompt.md)
+- **Tư duy phản biện, Minh chứng SDLC & Vấn đáp độc lập (Tiêu chí 5):** [`docs/Tieu_chi_5_Tu_duy_phan_bien_va_Van_dap_AI.md`](./docs/Tieu_chi_5_Tu_duy_phan_bien_va_Van_dap_AI.md)
+- **Hướng dẫn sử dụng hệ thống:** [`docs/Tuan_09_Huong_dan_su_dung.md`](./docs/Tuan_09_Huong_dan_su_dung.md)
+- **Hồ sơ thiết kế Tuần 01 - 04:** [`docs/Tuan_01_Khao_sat_va_Ke_hoach.md`](./docs/Tuan_01_Khao_sat_va_Ke_hoach.md), [`docs/Tuan_02_Yeu_cau_he_thong_SRS.md`](./docs/Tuan_02_Yeu_cau_he_thong_SRS.md), [`docs/Tuan_03_Dac_ta_Use_Cases.md`](./docs/Tuan_03_Dac_ta_Use_Cases.md), [`docs/Tuan_04_Thiet_ke_CSDL_va_Kien_truc.md`](./docs/Tuan_04_Thiet_ke_CSDL_va_Kien_truc.md)
+
+---
+
+
 ## ⚙️ Hướng dẫn cài đặt và khởi chạy cục bộ
 
 ```bash
